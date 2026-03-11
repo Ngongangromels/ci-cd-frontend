@@ -1,0 +1,41 @@
+name: GitHub Actions Vercel Preview Deployment
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+on:
+  push:
+    branches-ignore:
+      - main
+      - develop
+jobs:
+  Deploy-Preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install Vercel CLI
+        run: |
+          echo "Installing Vercel CLI..."
+          npm install --global vercel@canary
+      - name: Pull Vercel Environment Information
+        run: |
+          echo "Pulling Vercel environment information for preview..."
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Build Project Artifacts
+        run: |
+          echo "Building project artifacts for preview..."
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy Project Artifacts to Vercel
+        run: |
+          echo "Deploying project artifacts to Vercel preview..."
+          rm -rf .git
+          vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} > deployment-url.txt
+      - name: Update Workflow Summary
+        # Access the output set in the previous step
+        run: |
+          DEPLOYMENT_URL="${{ steps.vercel_deploy.outputs.deployment-url }}"
+          echo "## 🚀 Vercel Deployment Complete" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** Success" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🌐 **View Preview Deployment**" >> $GITHUB_STEP_SUMMARY
+          echo "$(cat deployment-url.txt)" >> $GITHUB_STEP_SUMMARY
+          echo "$DEPLOYMENT_URL" >> $GITHUB_STEP_SUMMARY

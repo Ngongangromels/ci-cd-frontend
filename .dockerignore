@@ -1,0 +1,44 @@
+# --- DÉPENDANCES ---
+# On ne copie jamais node_modules car Docker doit installer les siennes
+# (surtout pour les binaires natifs comme Sharp ou SWC)
+node_modules
+.pnpm-store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- BUILDS ET CACHE ---
+# On ignore les dossiers de build locaux pour que Docker reconstruise proprement
+.next
+out
+dist
+build
+.cache
+
+# --- CONFIGURATION ET SECRETS ---
+# On ignore les fichiers d'environnement locaux pour éviter de "hardcoder"
+# des secrets dans l'image. On passera les variables via Docker Compose ou Cloud.
+.env
+.env*.local
+
+# --- DOCKER ---
+# On ignore les fichiers Docker eux-mêmes pour éviter la récursion
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# --- OUTILS DE DÉVELOPPEMENT ET IDE ---
+.vscode
+.idea
+.git
+.gitignore
+.gitattributes
+.editorconfig
+.prettierrc
+.eslintrc*
+*.md
+README.md
+
+# --- SYSTÈME ---
+.DS_Store
+Thumbs.db
