@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from "next/link";
 
 // Interface pour typer les données de l'API
 interface Entreprise {
@@ -34,6 +35,9 @@ export default async function EntreprisesPage() {
             <h1 className="text-2xl font-bold mb-6 text-slate-800">
                 Répertoire des Entreprises Tech
             </h1>
+            <div>
+                <Link href="./sign-up.tsx"> sign In</Link>
+            </div>
 
             <div className="overflow-x-auto rounded-lg border border-slate-200 shadow-sm">
                 <table className="w-full text-sm text-left text-slate-500">
